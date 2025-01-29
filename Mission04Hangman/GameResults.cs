@@ -4,58 +4,60 @@ using System;
 
 public class GameResults
 {
-    /* The supporting class will:
-     * - Receive the "board" array from the driver class
-     * - Contain a method that prints the board based on the information passed to it
-     * - Contain a method that receives the game board array as input and returns if there is a winner and who it was
-     */
-
     // Method to print the current state of the Tic-Tac-Toe board
-    public static void PrintBoard(char[,] board)
+    public static void PrintBoard(char[] board)
     {
-        Console.Clear(); // Clears the console for a clean display
+        Console.Clear(); // Clears the console for a clean display before printing the board
         Console.WriteLine("Tic-Tac-Toe Game\n");
 
-        // Loop through each row of the board
         for (int row = 0; row < 3; row++)
         {
             Console.Write(" ");
-            // Loop through each column of the board
             for (int col = 0; col < 3; col++)
             {
-                Console.Write(board[row, col]); // Print the cell value (X, O, or empty space)
+                int index = row * 3 + col; // Convert row and column to the corresponding 1D array index
+                Console.Write(board[index]); // Print the board cell content
                 if (col < 2) Console.Write(" | "); // Print vertical dividers between columns
             }
-            Console.WriteLine(); // Move to the next line after printing a row
+            Console.WriteLine();
 
             if (row < 2) Console.WriteLine("---+---+---"); // Print horizontal dividers between rows
         }
         Console.WriteLine();
     }
 
-    // Method to check if there is a winner
-    public static char CheckWinner(char[,] board)
+    // Method to check if there is a winner based on the current board state
+    public static char CheckWinner(char[] board)
     {
-        // Check all rows and columns
+        char result = 'F' ; // Default result indicating no winner yet
+
+        // Check all rows for a winner
         for (int i = 0; i < 3; i++)
         {
-            // Check if all three values in the current row are the same (and not empty)
-            if (board[i, 0] != ' ' && board[i, 0] == board[i, 1] && board[i, 1] == board[i, 2])
-                return board[i, 0]; // Return the winning symbol (X or O)
-
-            // Check if all three values in the current column are the same (and not empty)
-            if (board[0, i] != ' ' && board[0, i] == board[1, i] && board[1, i] == board[2, i])
-                return board[0, i]; // Return the winning symbol (X or O)
+            int start = i * 3; // Starting index of the row
+            if (board[start] != ' ' && board[start] == board[start + 1] && board[start + 1] == board[start + 2])
+                return board[start]; // Return the winner (X or O)
         }
 
-        // Check the main diagonal (top-left to bottom-right)
-        if (board[0, 0] != ' ' && board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2])
-            return board[0, 0];
+        // Check all columns for a winner
+        for (int i = 0; i < 3; i++)
+        {
+            if (board[i] != ' ' && board[i] == board[i + 3] && board[i + 3] == board[i + 6])
+                return board[i]; // Return the winner (X or O)
+        }
 
-        // Check the other diagonal (top-right to bottom-left)
-        if (board[0, 2] != ' ' && board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0])
-            return board[0, 2];
+        // Check main diagonal (top-left to bottom-right)
+        if (board[0] != ' ' && board[0] == board[4] && board[4] == board[8])
+            return board[0]; // Return the winner (X or O)
 
-        return ' '; // No winner yet, return a space to indicate the game continues
+        // Check other diagonal (top-right to bottom-left)
+        if (board[2] != ' ' && board[2] == board[4] && board[4] == board[6])
+            return board[2]; // Return the winner (X or O)
+
+        // Check for a draw (if all positions are filled and no winner is found)
+        if (!board.Contains(' '))
+            return 'D'; // Return 'D' to indicate a draw
+
+        return result; // No winner yet, return false indicator
     }
 }
