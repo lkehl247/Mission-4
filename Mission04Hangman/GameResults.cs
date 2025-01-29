@@ -59,4 +59,3 @@ public class GameResults
         return ' '; // No winner yet, return a space to indicate the game continues
     }
 }
-}
