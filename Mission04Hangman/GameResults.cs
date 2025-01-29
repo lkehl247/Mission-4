@@ -7,7 +7,13 @@ public class GameResults
     // Method to print the current state of the Tic-Tac-Toe board
     public static void PrintBoard(char[] board)
     {
-        Console.Clear(); // Clears the console for a clean display before printing the board
+        // Console.Clear(); // Clears the console for a clean display before printing the board
+        Console.WriteLine();
+        Console.WriteLine(" 1 | 2 | 3 ");
+        Console.WriteLine("---+---+---");
+        Console.WriteLine(" 4 | 5 | 6 ");
+        Console.WriteLine("---+---+---");
+        Console.WriteLine(" 7 | 8 | 9 \n");
         Console.WriteLine("Tic-Tac-Toe Game\n");
 
         for (int row = 0; row < 3; row++)
@@ -23,6 +29,7 @@ public class GameResults
 
             if (row < 2) Console.WriteLine("---+---+---"); // Print horizontal dividers between rows
         }
+
         Console.WriteLine();
     }
 
