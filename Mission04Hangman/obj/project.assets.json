@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/calebstephenson/RiderProjects/Mission-4/ConsoleApp1/ConsoleApp1.csproj",
-      "projectName": "ConsoleApp1",
-      "projectPath": "/Users/calebstephenson/RiderProjects/Mission-4/ConsoleApp1/ConsoleApp1.csproj",
+      "projectUniqueName": "/Users/calebstephenson/RiderProjects/Mission-4/Mission04Hangman/Mission04Hangman.csproj",
+      "projectName": "Mission04Hangman",
+      "projectPath": "/Users/calebstephenson/RiderProjects/Mission-4/Mission04Hangman/Mission04Hangman.csproj",
       "packagesPath": "/Users/calebstephenson/.nuget/packages/",
-      "outputPath": "/Users/calebstephenson/RiderProjects/Mission-4/ConsoleApp1/obj/",
+      "outputPath": "/Users/calebstephenson/RiderProjects/Mission-4/Mission04Hangman/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/calebstephenson/.nuget/NuGet/NuGet.Config"
