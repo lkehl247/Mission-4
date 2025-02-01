@@ -1,130 +1,112 @@
-﻿namespace ConsoleApp1
-{ public class Program
+namespace ConsoleApp1
+{
+    using System;
+
+    public class Program
     {
-    static void Main(string[] args)
-    {
-    Console.WriteLine("Welcome to Tic Tac Toe \r\nPlease enter your names\r\nPlayer One will be 'X', Player Two will be 'O'");
-    List<int> choices = new List<int>();
-    List<string> options = new List<string>
-    {
-        "0 = Top Left", "1 = Top Center", "2 = Top Right",
-        "3 = Middle Left", "4 = Center", "5 = Middle Right",
-        "6 = Bottom Left", "7 = Bottom Center", "8 = Bottom Right"
-    };
-    Console.WriteLine("Player One's Name: ");
-    string playerOne = Console.ReadLine();
-    Console.WriteLine("Player Two's Name: ");
-    string playerTwo = Console.ReadLine();
-    do
-    {
-        int userChoice;
-        // Player One's turn
-        Console.WriteLine($"{playerOne}'s Turn");
-        Console.WriteLine("To make your move, pick a number");
-        // Print available options
-        for (int i = 0; i < options.Count; i++)
+        static void Main(string[] args)
         {
-            Console.WriteLine(options[i]);
-        }
-        // Loop until a valid and available choice is entered
-        while (true)
-        {
-            try
+            // Introduction to the game
+            Console.WriteLine("Welcome to Tic-Tac-Toe!");
+            Console.WriteLine("Player One will be 'X' and Player Two will be 'O'.\n");
+
+            // Get Player One's name
+            Console.Write("Player One, please enter your name: ");
+            string playerOne = Console.ReadLine();
+
+            // Get Player Two's name
+            Console.Write("Player Two, please enter your name: ");
+            string playerTwo = Console.ReadLine();
+
+            // Initialize the game board (a 1D char array for the 3x3 board)
+            char[] board = new char[9] { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
+
+            // List to keep track of player moves (so we can alternate between 'X' and 'O')
+            int moveCount = 0;
+
+            // Game loop
+            while (true)
             {
-                userChoice = int.Parse(Console.ReadLine());
-                // Check if the choice is valid
-                if (userChoice < 0 || userChoice > 8)
+                int userChoice;
+                string currentPlayer = (moveCount % 2 == 0) ? playerOne : playerTwo;
+                char currentPlayerSymbol = (moveCount % 2 == 0) ? 'X' : 'O';
+
+                // Display whose turn it is and the current symbol
+                Console.WriteLine($"\n{currentPlayer}'s Turn ({currentPlayerSymbol})");
+
+                // Print available positions
+                GameResults.PrintBoard(board);
+
+                while (true)
                 {
-                    Console.WriteLine("Invalid choice. Please enter a number between 0 and 8.");
-                    continue;  // Retry if the number is out of range
+                    try
+                    {
+                        // Make the prompt dynamic by addressing the player by name
+                        Console.Write($"{currentPlayer}, pick a number between 1 and 9 to make your move: ");
+                        userChoice = int.Parse(Console.ReadLine()) - 1; // Convert to 0-based index
+
+                        // Validate move input
+                        if (userChoice < 0 || userChoice > 8)
+                        {
+                            Console.WriteLine("Invalid choice. Please enter a number between 1 and 9.");
+                            continue;
+                        }
+
+                        // Check if the position is already taken
+                        if (board[userChoice] != ' ')
+                        {
+                            Console.WriteLine("This position has already been taken. Please choose another.");
+                            continue;
+                        }
+                        break;  // Valid move, exit the loop
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Invalid input. Please enter a valid number.");
+                    }
                 }
-                // Check if the position has already been taken
-                if (choices.Contains(userChoice))
+
+                // Mark the board with the current player's symbol
+                board[userChoice] = currentPlayerSymbol;
+                moveCount++;
+
+                // Check if there's a winner
+                char winner = GameResults.CheckWinner(board);
+                if (winner != 'F')
                 {
-                    Console.WriteLine("This position has already been taken. Please choose another.");
-                    continue;  // Retry if the position is already chosen
+                    // Print final board state
+                    GameResults.PrintBoard(board);
+
+                    if (winner == 'D')
+                    {
+                        Console.WriteLine("It's a draw!");
+                    }
+                    else if (winner == 'X')
+                    {
+                        Console.WriteLine($"{playerOne} wins!");
+                    }
+                    else if (winner == 'O')
+                    {
+                        Console.WriteLine($"{playerTwo} wins!");
+                    }
+                    break;  // End the game when there's a winner or draw
                 }
-                break;  // Valid choice, exit the loop
+
+                // If all moves are made and no winner, it's a draw
+                if (moveCount == 9)
+                {
+                    GameResults.PrintBoard(board);
+                    Console.WriteLine("It's a draw!");
+                    break;
+                }
             }
-            catch (FormatException)
-            {
-                Console.WriteLine("Invalid input. Please enter a valid number.");
-            }
+
+            // Final message after the game ends
+            Console.WriteLine("\nThank you for playing Tic-Tac-Toe!");
+
+            // Prevent the console from closing immediately after the game ends
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
         }
-        string result = userChoice switch
-        {
-            0 => "0 = Top Left",
-            1 => "1 = Top Center",
-            2 => "2 = Top Right",
-            3 => "3 = Middle Left",
-            4 => "4 = Center",
-            5 => "5 = Middle Right",
-            6 => "6 = Bottom Left",
-            7 => "7 = Bottom Center",
-            8 => "8 = Bottom Right",
-        };
-        options.Remove(result);  // Remove the selected option
-        choices.Add(userChoice); // Add the chosen position
-        PrintBoard(choices);
-        // Player Two's turn (same process)
-        Console.WriteLine($"{playerTwo}'s Turn");
-        Console.WriteLine("To make your move, pick a number");
-        // Print available options
-        for (int i = 0; i < options.Count; i++)
-        {
-            Console.WriteLine(options[i]);
-        }
-        while (true)
-        {
-            try
-            {
-                userChoice = int.Parse(Console.ReadLine());
-                // Check if the choice is valid
-                if (userChoice < 0 || userChoice > 8)
-                {
-                    Console.WriteLine("Invalid choice. Please enter a number between 0 and 8.");
-                    continue;  // Retry if the number is out of range
-                }
-                // Check if the position has already been taken
-                if (choices.Contains(userChoice))
-                {
-                    Console.WriteLine("This position has already been taken. Please choose another.");
-                    continue;  // Retry if the position is already chosen
-                }
-                break;  // Valid choice, exit the loop
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("Invalid input. Please enter a valid number.");
-            }
-        }
-        result = userChoice switch
-        {
-            0 => "0 = Top Left",
-            1 => "1 = Top Center",
-            2 => "2 = Top Right",
-            3 => "3 = Middle Left",
-            4 => "4 = Center",
-            5 => "5 = Middle Right",
-            6 => "6 = Bottom Left",
-            7 => "7 = Bottom Center",
-            8 => "8 = Bottom Right",
-        };
-        options.Remove(result);  // Remove the selected option
-        choices.Add(userChoice); // Add the chosen position
-        PrintBoard(choices);
-    } while (CheckWinner(choices) != 'F' && CheckWinner(choices) != 'D');
-    PrintBoard(choices);
-    string letter = CheckWinner(choices);
-    if (letter == "X")
-    {
-        Console.WriteLine($"{playerOne} Wins!");
-    }
-    else
-    {
-        Console.WriteLine($"{playerTwo} Wins!");
     }
 }
-}
-    }
-    
